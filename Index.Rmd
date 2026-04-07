@@ -838,15 +838,6 @@ mod_mad <- rma.mv(yi = yi, V = vcv,
 
 summary(mod_mad)
 
-decline <- bubble_plot(mod_mad,
-                       mod = "Publication_Year",
-                       group = "Study_ID",
-                       xlab = "Publication year",
-                       ylab = "Hedge's g",
-                       g = TRUE,
-                       weights = 1/sqrt(es$vi))
-
-decline
 ```
 
 ### Eggers regression + funnel
@@ -948,9 +939,3 @@ leaveoneout
 
 ```
 
-## R Session Information
-
-```{r, echo = T}
-# pander for making it look nicer
-sessionInfo() %>% pander()
-```
