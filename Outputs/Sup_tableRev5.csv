@@ -1,0 +1,58 @@
+,estimate,se,tval,df,pval,ci.lb,ci.ub,term,
+1,0.95,0.62,1.55,13.00,0.15,-0.38,2.28,intrcpt,bm reps
+2,-0.13,0.09,-1.56,13.00,0.14,-0.32,0.05,logmass,
+,,,,,,,,,
+3,0.04,1.33,0.03,19.00,0.98,-2.73,2.82,intrcpt1,bm aves
+4,0.06,0.13,0.45,19.00,0.66,-0.22,0.34,logmass1,
+,,,,,,,,,
+5,-0.09,0.43,-0.21,73.00,0.83,-0.95,0.76,intrcpt2,bm mam
+6,0.04,0.05,0.79,73.00,0.43,-0.05,0.13,logmass2,
+,,,,,,,,,
+7,0.45,0.37,1.19,107.00,0.24,-0.30,1.19,intrcpt3,fire age
+8,-0.04,0.06,-0.67,107.00,0.51,-0.16,0.08,log.age,
+,,,,,,,,,
+9,0.12,0.26,0.45,110.00,0.65,-0.40,0.63,intrcpt4,bm all
+10,0.01,0.03,0.34,110.00,0.74,-0.05,0.07,logmass3,
+,,,,,,,,,
+11,0.36,0.52,0.71,66.00,0.48,-0.66,1.39,intrcpt5,fire size
+12,-0.01,0.06,-0.16,66.00,0.87,-0.12,0.10,log.size,
+,,,,,,,,,
+13,0.35,0.16,2.19,94.00,0.03,0.03,0.66,intrcpt6,Fire type 
+14,-0.24,0.21,-1.18,94.00,0.24,-0.66,0.17,Impact_fire_typeWildfire,
+,,,,,,,,,
+15,-0.22,0.41,-0.54,91.00,0.59,-1.04,0.59,biome_nameBoreal forests/taiga,Biome
+16,-0.62,0.37,-1.68,91.00,0.10,-1.36,0.11,biome_nameDeserts and xeric shrublands,
+17,0.44,0.49,0.89,91.00,0.38,-0.54,1.41,biome_nameFlooded grasslands and savannas,
+18,-0.29,0.40,-0.73,91.00,0.47,-1.08,0.50,"biome_nameMediterranean forests, woodlands, and scrub or sclerophyll forests",
+19,0.16,0.32,0.49,91.00,0.62,-0.47,0.79,biome_nameTemperate broadleaf and mixed forests,
+20,-0.13,0.34,-0.37,91.00,0.71,-0.81,0.56,biome_nameTemperate coniferous forests,
+21,0.33,0.40,0.83,91.00,0.41,-0.47,1.13,"biome_nameTemperate grasslands, savannas, and shrublands",
+,,,,,,,,,
+22,0.38,0.20,1.93,108.00,0.06,-0.01,0.78,class_ncbiAves,Class
+23,0.22,0.13,1.72,108.00,0.09,-0.04,0.48,class_ncbiMammalia,
+24,0.01,0.21,0.05,108.00,0.96,-0.41,0.43,class_ncbiReptilia,
+,,,,,,,,,
+25,0.15,0.11,1.27,108.00,0.21,-0.08,0.37,Movement_categoryHome Range,Move cat
+26,0.29,0.13,2.20,108.00,0.03,0.03,0.55,Movement_categoryLinear Distance,
+27,0.21,0.20,1.04,108.00,0.30,-0.19,0.59,Movement_categoryOther Space Use,
+28,0.21,0.28,0.76,108.00,0.45,-0.34,0.77,Movement_categoryTortuosity,
+,,,,,,,,,
+29,0.20,0.10,2.03,111.00,0.05,0.00,0.39,intrcpt7,Overall
+,,,,,,,,,
+30,36.96,20.97,1.76,110.00,0.08,-4.59,78.51,intrcpt8,decline
+31,-0.02,0.01,-1.75,110.00,0.08,-0.04,0.00,Publication_Year,
+,,,,,,,,,
+32,0.29,0.21,1.38,110.00,0.17,-0.13,0.70,intrcpt9,eggers
+33,-0.03,0.07,-0.49,110.00,0.63,-0.17,0.10,sqeffectN,
+,,,,,,,,,
+34,0.23,0.23,0.98,100.00,0.33,-0.23,0.68,veg_climateclosed_Cold,veg/clim
+35,0.02,0.19,0.09,100.00,0.93,-0.36,0.40,veg_climateclosed_Temperate,
+36,-0.13,0.23,-0.55,100.00,0.58,-0.59,0.33,veg_climateopen_Arid,
+37,0.87,0.38,2.31,100.00,0.02,0.12,1.61,veg_climateopen_Tropical,
+38,0.23,0.23,0.98,100.00,0.33,-0.23,0.68,veg_climateclosed_Cold1,
+39,0.02,0.19,0.09,100.00,0.93,-0.36,0.40,veg_climateclosed_Temperate1,
+40,-0.13,0.23,-0.55,100.00,0.58,-0.59,0.33,veg_climateopen_Arid1,
+41,0.87,0.38,2.31,100.00,0.02,0.12,1.61,veg_climateopen_Tropical1,
+,,,,,,,,,
+42,-0.32,0.43,-0.75,110.00,0.45,-1.18,0.53,intrcpt10,Fire act
+43,0.96,0.78,1.24,110.00,0.22,-0.58,2.51,fireactivi,

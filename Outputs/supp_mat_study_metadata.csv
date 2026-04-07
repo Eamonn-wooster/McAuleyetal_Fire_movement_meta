@@ -1,0 +1,169 @@
+,Firstauthor_Year,Publication_Year,Study_Country,Continent,title,article.id,Study_Species,n_effect_sizes
+1,Cox2007,2007,United States of America,North America,"Home range and survival characteristics of male Bachman's Sparrows in an old-growth forest managed with breeding season burns
+",9,Aimophila aestivalis,1
+2,Kelt2014,2014,United States of America,North America,"Home range size and habitat selection of reintroduced <i>Sylvilagus</i> <i>bachmani</i> <i>riparius</i>
+",10,Sylvilagus bachmani riparius,1
+3,Flaherty2020,2020,United States of America,North America,"HABITAT SELECTION AND MOVEMENT PATTERNS OF COPPERHEADS (<i>AGKISTRODON CONTORTRIX</i>) IN FIRE-ALTERED LANDSCAPES
+",13,Agkistrodon contortrix,2
+4,Kortner2007,2007,Australia,Oceania,"Spatial ecology of the mulgara in arid Australia:: impact of fire history on home range size and burrow use
+",14,Dasycercus blythi,1
+5,Michael2014,2014,Australia,Oceania,"The effects of prey, habitat heterogeneity and fire on the spatial ecology of peninsular Diamond Pythons (<i>Morelia spilota spilota</i>: Pythonidae)
+",17,Morelia spilota spilota,NA
+6,Povh2023,2023,Australia,Oceania,"A conservation-significant threatened mammal uses fire exclusions and shifts ranges in the presence of prescribed burning
+",19,Setonix brachyurus,NA
+7,Rota2014,2014,United States of America,North America,"Space-use and habitat associations of Black-backed Woodpeckers (<i>Picoides arcticus</i>) occupying recently disturbed forests in the Black Hills, South Dakota
+",30,Picoides arcticus,NA
+8,Jansen2000,2000,South Africa,Africa,"Habitat utilization and home range of the redwing francolin, <i>Francolinus levaillantii</i>, in highland grasslands, Mpumalanga province, South Africa
+",32,Francolinus levaillantii,1
+9,MacGregor2013,2013,Australia,Oceania,"Home range size and use by the long-nosed bandicoot (<i>Perameles nasuta</i>) following fire
+",33,Perameles nasuta,NA
+10,Law2013,2013,Australia,Oceania,"Response of eastern pygmy possums, <i>Cercartetus nanus</i>, to selective logging in New South Wales: home range, habitat selection and den use
+",44,Cercartetus nanus,NA
+11,Dalerum2007,2007,Canada,North America,"Wildfire effects on home range size and fidelity of boreal caribou in Alberta, Canada
+",58,Rangifer tarandus caribou,3
+12,Hope2012,2012,Australia,Oceania,"Short-term response of the long-nosed bandicoot, <i>Perameles nasuta</i>, and the southern brown bandicoot, <i>Isoodon obesulus obesulus</i>, to low-intensity prescribed fire in heathland vegetation
+",67,Perameles nasuta,1
+13,Kreling2021,2021,United States of America,North America,"Site fidelity and behavioral plasticity regulate an ungulate's response to extreme disturbance
+",69,Odocoileus hemionus columbianus,8
+14,Roe2020,2020,United States of America,North America,"Variation and repeatability of home range in a forest-dwelling terrestrial turtle: implications for prescribed fire in forest management
+",84,Terrapene carolina,2
+15,Everitts2015,2015,United States of America,North America,"Effects of Prescribed Burning on Swainson's Warbler Home-Range Size and Habitat Use
+",86,Limnothlypis swainsonii,1
+16,Sutton2017,2017,United States of America,North America,"Spatial ecology and multi-scale habitat selection of the Copperhead (<i>Agkistrodon contortrix</i>) in a managed forest landscape
+",90,Agkistrodon contortrix,NA
+17,Vernes2001,2001,Australia,Oceania,"Stability of nest range, home range and movement of the northern bettong (<i>Bettongia tropica</i>) following moderate-intensity fire in a tropical woodland, north-eastern Queensland
+",95,Bettongia tropica,1
+18,Cheynes2019,2019,Indonesia,Asia,"Home range variation and site fidelity of Bornean southern gibbons [<i>Hylobates albibarbis</i>] from 2010-2018
+",99,Hylobates albibarbis,NA
+19,Hurteau2010,2010,United States of America,North America,"Variability in Nest Density, Occupancy, and Home Range Size of Western Bluebirds after Forest Treatments
+",103,Sialia mexicana,1
+20,Blount2012,2012,United States of America,North America,"RESPONSE OF THE MOUNT GRAHAM RED SQUIRREL (<i>TAMIASCIURUS HUDSONICUS GRAHAMENSIS</i>) TO POSTFIRE CONDITIONS
+",105,Tamiasciurus hudsonicus grahamensis,NA
+21,Crabb2022,2022,United States of America,North America,"Black bear spatial responses to the Wallow Wildfire in Arizona
+",109,Ursus americanus,2
+22,Yager2007,2007,United States of America,North America,"Gopher tortoise response to habitat management by prescribed burning
+",112,Gopherus polyphemus,1
+23,Carey1992,1992,United States of America,North America,"NORTHERN SPOTTED OWLS - INFLUENCE OF PREY BASE AND LANDSCAPE CHARACTER
+",116,Strix occidentalis caurina,NA
+24,Thompson2008,2008,United States of America,North America,"Swift fox response to prescribed fire in shortgrass steppe
+",120,Vulpes velox,NA
+25,Green2005,2005,Australia,Oceania,"Winter home range and foraging of common wombats (<i>Vombatus ursinu</i>s) in patchily burnt subalpine areas of the Snowy Mountains, Australia
+",122,Vombatus ursinus,NA
+26,Gasaway1985,1985,United States of America,North America,"INITIAL RESPONSE OF MOOSE, ALCES-ALCES, TO A WILDFIRE IN INTERIOR ALASKA
+",133,Alces alces,2
+27,Carroll2017,2017,United States of America,North America,"Response of Northern Bobwhite Movements to Management-Driven Disturbance in a Shrub-Dominated Ecosystem
+",135,Colinus virginianus,1
+28,Clapp2016,2016,United States of America,North America,"SHORT-TERM IMPACTS OF FIRE-MEDIATED HABITAT ALTERATIONS ON AN ISOLATED BIGHORN SHEEP POPULATION
+",142,Ovis canadensis,3
+29,Morollón2022,2022,Spain,Europe,"Wildfire response of GPS-tracked Bonelli's eagles in eastern Spain
+",179,Aquila fasciata,NA
+30,Leonard2010,2010,United States of America,North America,"EFFECTS OF FIRE ON ENDANGERED MOUNT GRAHAM RED SQUIRRELS (<i>TAMIASCIURUS HUDSONICUS GRAHAMENSIS</i>): RESPONSES OF INDIVIDUALS WITH KNOWN FATES
+",183,Tamiasciurus hudsonicus grahamensis,5
+31,Lacki2009,2009,United States of America,North America,"RESPONSE OF NORTHERN BATS (<i>MYOTIS SEPTENTRIONALIS</i>) TO PRESCRIBED FIRES IN EASTERN KENTUCKY FORESTS
+",189,Myotis septentrionalis,1
+32,Cherry2018,2018,United States of America,North America,"Wildfire affects space use and movement of white-tailed deer in a tropical pyric landscape
+",195,Odocoileus virginianus,12
+33,Gwinn2016,2016,United States of America,North America,"Differential response to fire by an introduced and an endemic species complicates endangered species conservation
+",215,Sciurus aberti,1
+34,Yarnell2008,2008,South Africa,Africa,"The impact of fire on habitat use by the short-snouted elephant shrew (<i>Elephantulus brachyrhynchus</i>) in North West Province, South Africa
+",222,Elephantulus brachyrhynchus,2
+35,Delay2020,2024,Canada,North America,"Wind farm and wildfire: spatial ecology of an endangered freshwater turtle in a recovering landscape
+",229,Clemmys guttata,2
+36,Herzog2014,2014,South Africa,Africa,"Fire and Home Range Expansion: A Behavioral Response to Burning Among Savanna Dwelling Vervet Monkeys (<i>Chlorocebus aethiops</i>)
+",232,Chlorocebus aethiops,NA
+37,Berenstain1986,1986,Indonesia,Asia,"RESPONSES OF LONG-TAILED MACAQUES TO DROUGHT AND FIRE IN EASTERN BORNEO - A PRELIMINARY-REPORT
+",241,Macaca fascicularis,NA
+38,Woolley2008,2008,South Africa,Africa,"Population and Individual Elephant Response to a Catastrophic Fire in Pilanesberg National Park
+",249,Loxodonta africana,NA
+39,Jaffe2009,2008,Kenya,Africa,"After the Fire: Benefits of Reduced Ground Cover for Vervet Monkeys (<i>Cercopithecus aethiops</i>)
+",260,Cercopithecus aethiops,3
+40,Sommer2018,2018,Australia,Oceania,"Red-backed fairywrens adjust habitat use in response to dry season fires
+",297,Malurus melanocephalus,NA
+41,Lappan2021,2021,Indonesia,Asia,"Long-term effects of forest fire on habitat use by siamangs in Southern Sumatra
+",304,Symphalangus syndactylus,NA
+42,Cross2015,2015,United States of America,North America,"Multi-scale Responses of Eastern Massasauga Rattlesnakes (Sistrurus catenatus) to Prescribed Fire
+",305,Sistrurus catenatus,NA
+43,Harris2020,2020,United States of America,North America,"Direct and Indirect Effects of Fire on Eastern Box Turtles
+",307,Terrapene carolina carolina,2
+44,VernesHaydon2001,2001,Australia,Oceania,"Effect of fire on northern bettong (<i>Bettongia tropica</i>) foraging behaviour
+",324,Bettongia tropica,NA
+45,Huysman2021,2021,United States of America,North America,"Habitat selection by a predator of rodent pests is resilient to wildfire in a vineyard agroecosystem
+",344,Tyto furcata,2
+46,Pitt2013,2013,United States of America,North America,"Effects of fuel reduction treatments on movement and habitat use of American toads in a southern Appalachian hardwood forest
+",353,Anaxyrus americanus,1
+47,ODonnell2016,2016,United States of America,North America,"Prescribed fire alters surface activity and movement behavior of a terrestrial salamander
+",359,Plethodon albagula,NA
+48,Sanz-Aguilar2011,2011,Spain,Europe,"Coexisting with fire: The case of the terrestrial tortoise <i>Testudo graeca</i> in mediterranean shrublands
+",423,Testudo graeca,NA
+49,Lindenmayer2008,2008,Australia,Oceania,"The use of hollows and dreys by the common ringtail possum (<i>Pseudocheirus peregrinus</i>) in different vegetation types
+",434,Pseudocheirus peregrinus,NA
+50,Lovich2018,2018,United States of America,North America,"Agassiz's desert tortoise (<i>Gopherus agassizii</i>) activity areas are little changed after wind turbine-induced fires in California
+",468,Gopherus agassizii,2
+51,VanTassel2018,2018,United States of America,North America,"Altered space use and movement distances of Merriam's kangaroo rat, <i>Dipodomys merriami</i>, in post-fire lands
+",487,Dipodomys merriami,NA
+52,Pasch2011,2011,United States of America,North America,"Impacts of fire suppression on space use by Mexican fox squirrels
+",490,Sciurus nayaritensis chiricahuae,2
+53,Fordyce2016,2016,Australia,Oceania,"Fire affects microhabitat selection, movement patterns, and body condition of an Australian rodent (<i>Rattus fuscipes</i>)
+",493,Rattus fuscipes,NA
+54,Howey2016,2016,United States of America,North America,"Effects of a Landscape Disturbance on the Habitat Use and Behavior of the Black Racer
+",663,Coluber constrictor,NA
+55,Blakey2022,2022,United States of America,North America,"Mountain lions avoid burned areas and increase risky behavior after wildfire in a fragmented urban landscape
+",924,Puma concolor,6
+56,Hutchen2019,2019,Canada,North America,"Foraging behaviour of snowshoe hares (<i>Lepus americanus</i>) in conifer forests regenerating after fire
+",938,Lepus americanus,1
+57,Rickbeil2017,2017,Canada,North America,"Barren-ground caribou <i>(Rangifer tarandus groenlandicus</i>) behaviour after recent fire events; integrating caribou telemetry data with Landsat fire detection techniques
+",969,Rangifer tarandus groenlandicus,NA
+58,Ballard2000,2000,United States of America,North America,"Short-term response of Gray Wolves, <i>Canis lupis</i>, to wildfire in Northwestern Alaska
+",1015,Canis lupis,NA
+59,McGregor2014,2014,Australia,Oceania,"Landscape Management of Fire and Grazing Regimes Alters the Fine-Scale Habitat Utilisation by Feral Cats
+",1188,Felis catus,NA
+60,Tulloch2006,2006,Australia,Oceania,"Floristic and structural components of habitat use by the eastern pygmy-possum (<i>Cercartetus nanus</i>) in burnt and unburnt habitats
+",1276,Cercartetus nanus,NA
+61,Lang2002,2002,United States of America,North America,"Wood thrush movements and habitat use: Effects of forest management for red-cockaded woodpeckers
+",1330,Hylocichla mustelina,1
+62,Odden2005,2005,Nepal,Asia,"Hog deer <i>Axis porcinus</i> need threatened tallgrass floodplains:: a study of habitat selection in lowland Nepal
+",1977,Axis porcinus,NA
+63,Gasaway1989,1989,United States of America,North America,"Response of radio-collared moose to a large burn in central Alaska
+",3040,Alces alces,6
+64,Shaw1990,1990,United States of America,North America,"Bison movements in relation to fire and seasonality
+",3048,Bison bison,1
+65,Hoffmann2001,2001,Uganda,Africa,"Spatial and temporal patterns in Lemniscomys striatus (Linnaeus 1758) as revealed by radio-tracking
+",3329,Lemniscomys striatus,NA
+66,Brisson2003,2003,United States of America,North America,"Impact of fire management on the ecology of collared lizard (Crotaphytus collaris) populations living on the Ozark Plateau
+",3377,Crotaphytus collaris,1
+67,Cunningham2004,2004,United States of America,North America,"Effects of wildfire on black bear demographics in central Arizona
+",3414,Ursus americanus,1
+68,Johnson2012,2012,United States of America,North America,"Roost networks of northern myotis (Myotis septentrionalis) in a managed landscape
+",4024,Myotis septentrionalis,NA
+69,Pople2012,2012,Paraguay,South America,"Response of White-winged Nightjars Eleothreptus candicans to a prescribed burn of cerrado grassland at Bosque Mbaracayú biosphere reserve, Paraguay
+",4083,Eleothreptus candicans,NA
+70,Lee2012,2012,South Korea,Asia,"Seasonal movements and home range sizes of korean field mouse Apodemus peninsulae in unburned and post-fire pine planted stands within a pine forest
+",4084,Apodemus peninsulae,8
+71,Jones2014,2014,United States of America,North America,"Bachman's sparrow (peucaea aestivalis) response to variation in the extent of burns conducted during the nesting season 
+",4223,Peucaea aestivalis,NA
+72,Venter2014,2014,South Africa,Africa,"Forage patch use by grazing herbivores in a South African grazing ecosystem
+",4226,Equus burchelli,4
+73,Berry2016,2016,Australia,Oceania,"Fire severity alters spatio-temporal movements and habitat utilisation by an arboreal marsupial, the mountain brushtail possum (Trichosurus cunninghami)
+",4426,Trichosurus cunninghami,1
+74,Silva2020,2020,Canada,North America,"Comparison of pre-fire and post-fire space use reveals varied responses by woodland caribou (Rangifer tarandus caribou) in the boreal shield
+",4967,Rangifer tarandus caribou,NA
+75,Nowack2016,2016,Australia,Oceania,"Cool echidnas survive the fire
+",5741,Tachyglossus aculeatus,NA
+76,Blanchard1990,1990,United States of America,North America,"REACTIONS OF GRIZZLY BEARS, URSUS-ARCTOS-HORRIBILIS, TO WILDFIRE IN YELLOWSTONE-NATIONAL-PARK, WYOMING
+",5744,Ursus arctos horribilus,NA
+77,Almeida2018,2018,Portugal,Europe,"Roe Deer's Spatio-Temporal Response to Novel Environments
+",5763,Capreolus capreolus,NA
+78,Michaud2017,2017,United States of America,North America,"Habitat use by wintering passerines in fire-managed forests along the U.S. Gulf Coast
+",5769,Regulus calendula,3
+79,Grahmann2013,2013,United States of America,North America,"Patch-Burning and Grazing to Improve Exotic Grass-Dominated Landscapes for Northern Bobwhites
+",5781,Colinus virginianus,NA
+80,Carver1998,1998,United States of America,North America,"Northern bobwhite brood habitat relationships in old-field vegetation in the Red Hills region of northern Florida
+",5828,Colinus virginianus,NA
+81,Griffiths1994,1994,Australia,Oceania,"The Effect of Seasonal Environment and Fire on the Ecology of Frillneck Lizards, Chlamydosaurus Kingii, in the Wet-Dry Tropics of Northern Australia
+",5833,Chlamydosaurus kingii,2
+82,Chavarria2013,2013,United States of America,North America,"Ecology of Montezuma quail in southeast Arizona
+",5911,Cyrtonix montezumae,4
+83,Thompson1993,1993,United States of America,North America,"Ecology of Merriam's turkeys in relation to burned and logged areas in southeastern Montana
+",5940,Meleagris gallopavo merriami,7
+84,Tyers2003,2003,United States of America,North America,"Winter ecology of moose on the Northern Yellowstone Winter Range
+",6023,Alces alces shirasi,NA

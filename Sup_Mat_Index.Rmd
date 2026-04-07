@@ -1,0 +1,966 @@
+---
+title: "**MOVEMENT IN THE PYROCENE: A GLOBAL META-ANALYSIS OF ANIMAL MOVEMENT RESPONSES TO FIRE**"
+subtitle: "**Supplementary Material**"
+written by: "**CL McAuley, EIF Wooster, TS Doherty, MA Cowan, CJ Jolly, GD Linley, DM Westaway, B Wilson, DG Nimmo**"
+date: "`r Sys.Date()`"
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-depth: 4
+    toc-title: "**Table of Contents**"
+    output-file: "index.html"
+    theme: simplex
+    embed-resources: true
+    code-fold: true
+    code-tools: true
+    number-sections: true
+    #bibliography: ./bib/ref.bib
+    fontsize: "12"
+    max-width: "10"
+    code-overflow: wrap
+crossref: 
+  fig-title: Figure     # (default is "Figure")
+  tbl-title: Table     # (default is "Table")
+  title-delim: —     # (default is ":")
+  fig-prefix: Fig.   # (default is "Figure")
+  tbl-prefix: Tab.    # (default is "Table")
+editor_options: 
+  chunk_output_type: console
+execute:
+  warning: false
+  message: false
+  tidy: true
+  #cache: true
+---
+
+------------------------------------------------------------------------
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(eval = FALSE)
+```
+
+## Dataset
+
+```{r, echo = T}
+
+kable(data, "html", escape = FALSE) %>% kable_styling("striped", position = "left", full_width = TRUE) %>%
+  column_spec(66, width_min = "5in") %>%
+  scroll_box(width = "100%",
+    height = "500px")
+
+```
+
+## Setting up
+
+### Loading Packages
+
+```{r, echo = T}
+
+# Loading Packages
+pacman::p_load(devtools, 
+               tidyverse, 
+               metafor, 
+               patchwork, 
+               R.rsp, orchaRd,
+               emmeans,
+               metafor,
+               orchaRd,
+               stringr,
+               dplyr,
+               broom,
+               tidyverse,
+               here,
+               broom,
+               ggplot2,
+               viridis,
+               data.table,
+               Matrix, 
+               matrixcalc,
+               ape, 
+               multcomp 
+) 
+
+
+#for the model loops below
+
+```
+
+### Reading in Dataset and Phylogentic Tree
+
+```{r, echo = T}
+
+# Reading in Data
+data <- read.csv(here("Outputs/Dat_for_MA_analysisRev5.csv")) 
+
+# Reading in tree
+tree1 <- read.tree(here("Outputs/Tree_fire-Rev4.tre")) 
+
+# Getting branch length and correlation matrix
+tree1b <- compute.brlen(tree1)
+cor1 <-  vcv(tree1b, corr=T)
+
+# checking the match, needs to return 0 
+setdiff(dat$Species_tree, tree1$tip.label)
+
+```
+
+### Calculating Effect Sizes
+
+```{r, echo = T}
+
+# Calculating Hedge's G
+es <- escalc(
+  measure = "SMD",       
+  m1i = Mean_Fire,
+  sd1i = sd_Fire,
+  n1i = Burned_n,
+  m2i = Mean_Unburned,
+  sd2i = sd_Unburned,
+  n2i = Unburned_n,
+  data = data,
+  vtype = "UB")          
+
+# Inspecting results
+print(es) 
+
+# Adding factor for obs level random effect
+es$Obs_ID <- factor(1:nrow(es))
+
+# Adding factor for study level random effect
+es$StudyID <- NULL
+
+es$Study_ID <- factor(as.numeric(as.factor(es$Firstauthor_Year)))
+
+# Correcting direction of ES for Harris2020 tortuosity
+es %>%
+  dplyr::filter(Firstauthor_Year %in% c("Harris2020"))
+  
+es <- es %>%
+  mutate(yi = ifelse(Obs_ID %in% c(91), yi * -1, yi))
+
+```
+
+### Correlation matrices to account for non-independence in models
+
+```{r, echo = T}
+
+# Matrix to account for non-independence in studies and observations
+vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5,
+             data = es) 
+
+```
+
+## Meta-analysis {.tabset}
+
+```{r, echo = T}
+# Model
+  mod.overall <- rma.mv(yi = yi, V = vcv,
+                        random = list(~1 | Study_ID,
+                                      ~1 | Species_tree, # phylo effect 
+                                      ~1 | Species2, # non-phylo effect 
+                                      ~1 | Obs_ID), 
+                        data =  es,
+                        control = list(optimizer="BFGS"),
+                        test = "t",
+                        sparse = TRUE,
+                        R = list(Species_tree = cor1)
+  )
+
+summary(mod.overall)
+
+dif <- orchard_plot(mod.overall, xlab = "Change in movement (Hedge's g)", group = "Study_ID",
+                        angle = 0)
+
+dif
+
+round(i2_ml(mod.overall), 2)
+
+```
+
+## Meta-regression:Uni-moderator {.tabset}
+
+### Movement Category
+
+```{r, echo = T}
+# Model
+mod.overall_move <- rma.mv(yi = yi, V = vcv,
+                             random = list(~1 | Study_ID,
+                                           ~1 | Species_tree, # phylo effect 
+                                           ~1 | Species2, # non-phylo effect 
+                                           ~1 | Obs_ID), 
+                             data =  es,
+                             mods = ~ Movement_category -1,
+                             control = list(optimizer="BFGS"),
+                             test = "t",
+                             sparse = TRUE,
+                             R = list(Species_tree = cor1)
+  )
+
+summary(mod.overall_move)
+
+movecatplot <- orchard_plot(mod.overall_move, xlab = "Change in movement (Hedge's g)", group = "Study_ID", mod = "Movement_category",angle = 0)
+
+movecatplot
+
+```
+
+### Taxanomic Class
+
+```{r, echo = T}
+# Filtering out Amphibia due to small sample size
+class.es <- es %>%
+  filter(class_ncbi %in% c("Aves", "Mammalia", "Reptilia"))
+
+class.es$class_ncbi <- factor(class.es$class_ncbi)
+
+# VCV
+class.vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5,
+                   data = class.es) 
+
+# Model
+mod.class <- rma.mv(yi = yi, V = class.vcv,
+                      random = list(~1 | Study_ID,
+                                    ~1 | Species_tree, # phylo effect 
+                                    ~1 | Species2, # non-phylo effect 
+                                    ~1 | Obs_ID), 
+                      data =  class.es,
+                      mods = ~ class_ncbi -1,
+                      control = list(optimizer="BFGS"),
+                      test = "t",
+                      sparse = TRUE,
+                      R = list(Species_tree = cor1)
+  )
+
+summary(mod.class)
+
+classplot <- orchard_plot(mod.class, xlab = "Change in movement (Hedge's g)", 
+                           group = "Study_ID", mod = "class_ncbi", angle = 0)
+
+classplot
+
+```
+
+### Fire Type
+
+```{r, echo = T}
+# Filtering out not provided, unclear or both fire types
+fire.es <- es %>%
+  filter(Impact_fire_type %in% c("Planned", "Wildfire"))
+
+fire.es$Impact_fire_type <- factor(fire.es$Impact_fire_type)
+
+# VCV
+fire.vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5, 
+                  data = fire.es) 
+
+# Model
+mod.fire <- rma.mv(yi = yi, V = fire.vcv,
+                     random = list(~1 | Study_ID,
+                                   ~1 | Species_tree, # phylo effect 
+                                   ~1 | Species2, # non-phylo effect 
+                                   ~1 | Obs_ID), 
+                     data =  fire.es,
+                     mods = ~ Impact_fire_type,
+                     control=list(optimizer="BFGS"),
+                     test = "t",
+                     sparse = TRUE,
+                     R = list(Species_tree = cor1)
+  )
+
+summary(mod.fire)
+
+firetypeplot <- orchard_plot(mod.fire, xlab = "Change in movement (Hedge's g)", 
+                          group = "Study_ID", mod = "Impact_fire_type", angle = 0)
+
+firetypeplot
+```
+
+### Burn Extent
+
+```{r, echo = T}
+
+# Coercing variable to integer
+size.es <- es %>%
+  mutate(Impact_fire_size_ha = as.numeric(Impact_fire_size_ha) ) %>%
+  mutate(Impact_fire_size_ha = as.integer(round(Impact_fire_size_ha)))
+
+# Looking for NAs
+summary(size.es$Impact_fire_size_ha)
+
+# Removing NAs
+size.es <- size.es[!is.na(size.es$Impact_fire_size_ha), ]
+
+# Transforming data
+size.es$log.size <- log(size.es$Impact_fire_size_ha)
+hist(size.es$log.size)
+
+#VCV 
+size.vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5,
+                  data = size.es) 
+
+# Model 
+mod.size <- rma.mv(yi = yi, V = fire.vcv,
+                     random = list(~1 | Study_ID,
+                                   ~1 | Species_tree, # phylo effect 
+                                   ~1 | Species2, # non-phylo effect 
+                                   ~1 | Obs_ID), 
+                     data =  size.es,
+                     mods = ~ log.size, 
+                     test = "t",
+                     sparse = TRUE,
+                     R = list(Species_tree = cor1)
+  )
+ 
+summary(mod.size)
+
+newdat.size <- data.frame(log.size = seq(min(size.es$log.size, na.rm = TRUE),
+                                         max(size.es$log.size, na.rm = TRUE),
+                                         length.out = 100)) 
+
+X.size <- model.matrix(~ log.size, data = newdat.size)[, -1, drop = FALSE]
+
+preds.size <- predict(mod.size, newmods = X.size)
+
+plot_data.size <- cbind(newdat.size, preds.size)
+
+setDT(size.es)
+
+size.es[, wi := 1/sqrt(vi)]
+size.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
+size.es
+
+prey_age_text <- tidy(mod.size)
+prey_age_text
+
+p.size.mean <- ggplot()+
+  # now add the rest of the points:
+  geom_jitter(data = size.es, 
+              aes(x = log.size, size = pt_size, 
+                  y = yi),
+              position = position_jitter(width = 0.01),
+              inherit.aes = F,  alpha = 0.5)+
+  geom_hline(yintercept = 0, lty = "dashed")+
+  geom_ribbon(data = plot_data.size,
+              aes(x = log.size,
+                  ymin = pi.lb, ymax = pi.ub),
+              fill = "transparent", color = "#dad7cd",
+              alpha = .3)+
+  geom_ribbon(data = plot_data.size, 
+              aes(x = log.size,
+                  ymin = ci.lb, ymax = ci.ub),
+              alpha = .3)+
+  geom_line(data = plot_data.size, 
+            aes(x = log.size,
+                y = pred),
+            alpha = .8)+
+  
+  # coord_cartesian(ylim = c(-4, 4))+
+  scale_size_identity()+
+  theme_bw()+
+  xlab("Log Burn Area (ha)")+
+  ylab("Hedge's G")+
+  theme(legend.position = "none",
+        text = element_text(color = "black", family = "Helvetica"), axis.text = element_text(color = "black", family = "Helvetica"),
+        panel.grid = element_blank(),
+        panel.border = element_blank())
+
+p.size.mean
+
+```
+
+### Time Since Fire
+
+```{r, echo = T}
+
+# Coercing variable to integer
+es <- es %>%
+  mutate(Maximum_treatment_burn_age_days = if_else(
+    grepl("^[-]?[0-9]+$", Maximum_treatment_burn_age_days),
+    as.integer(Maximum_treatment_burn_age_days),
+    NA_integer_
+  ))
+
+# Looking for NAs
+summary(es$Maximum_treatment_burn_age_days)
+
+# Removing NAs
+age.es <- es[!is.na(es$Maximum_treatment_burn_age_days), ]
+
+# Transforming data
+age.es$log.age <- log(age.es$Maximum_treatment_burn_age_days)
+hist(age.es$log.age)
+
+# Model
+mod.age <- rma.mv(yi = yi, V = vcv,
+                    random = list(~1 | Study_ID,
+                                  ~1 | Species_tree, # phylo effect 
+                                  ~1 | Species2, # non-phylo effect 
+                                  ~1 | Obs_ID), 
+                    data =  age.es,
+                    mods = ~ log.age,
+                    test = "t",
+                    sparse = TRUE,
+                    R = list(Species_tree = cor1)
+  )
+
+summary(mod.age)
+
+newdat.age <- data.frame(log.age = seq(min(age.es$log.age, na.rm = TRUE),
+                                       max(age.es$log.age, na.rm = TRUE),
+                                       length.out = 100))
+
+X.age <- model.matrix(~ log.age, data = newdat.age)[, -1, drop = FALSE]
+
+preds.age <- predict(mod.age, newmods = X.age)
+
+plot_data.age <- cbind(newdat.age, preds.age)
+
+setDT(age.es)
+
+age.es[, wi := 1/sqrt(vi)]
+age.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
+age.es
+
+prey_age_text <- tidy(mod.age)
+prey_age_text
+
+p.age.mean <- ggplot()+
+  # now add the rest of the points:
+  geom_jitter(data = age.es, ## CM Changed this to age.es to due error "object 'yi' not found" - Matches the BM model
+              aes(x = log.age, size = pt_size, 
+                  y = yi),
+              position = position_jitter(width = 0.01),
+              inherit.aes = F,  alpha = 0.5)+
+  geom_hline(yintercept = 0, lty = "dashed")+
+  geom_ribbon(data = plot_data.age,
+              aes(x = log.age,
+                  ymin = pi.lb, ymax = pi.ub),
+              fill = "transparent", color = "#dad7cd",
+              alpha = .3)+
+  geom_ribbon(data = plot_data.age, 
+              aes(x = log.age,
+                  ymin = ci.lb, ymax = ci.ub),
+              alpha = .3)+
+  geom_line(data = plot_data.age, 
+            aes(x = log.age,
+                y = pred),
+            alpha = .8)+
+  
+  # coord_cartesian(ylim = c(-4, 4))+
+  scale_size_identity()+
+  theme_bw()+
+  xlab("Log Maximum Burn Age (days)")+
+  ylab("Hedge's G")+
+  theme(legend.position = "none",
+        text = element_text(color = "black", family = "Helvetica"), axis.text = element_text(color = "black", family = "Helvetica"),
+        panel.grid = element_blank(),
+        panel.border = element_blank())
+
+p.age.mean
+
+```
+
+### Biome
+
+```{r, echo = T}
+# Filtering out biomes with <10 es
+biome.es <- es %>%
+  group_by(biome_name) %>%
+  filter(n() >= 10) %>%
+  ungroup()
+
+table(biome.es$biome_name)
+
+biome.es$biome_name <- factor(biome.es$biome_name)
+
+# VCV
+biome.vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5,
+                   data = biome.es) 
+
+# Model
+mod.biome <- rma.mv(yi = yi, V = biome.vcv,
+                      random = list(~1 | Study_ID,
+                                    ~1 | Species_tree, # phylo effect 
+                                    ~1 | Species2, # non-phylo effect 
+                                    ~1 | Obs_ID), 
+                      data =  biome.es,
+                      mods = ~ biome_name -1, 
+                      control=list(optimizer="BFGS"),
+                      test = "t",
+                      sparse = TRUE,
+                      R = list(Species_tree = cor1)
+  )
+
+summary(mod.biome)
+
+
+biomeplot <- orchard_plot(mod.biome, xlab = "Change in movement (Hedge's g)", group = "Study_ID",
+                           mod = "biome_name", angle = 0)
+
+biomeplot
+
+```
+
+### Body Mass
+
+```{r, echo = T}
+#Transforming data
+es$logmass <- log(es$BodyMass.g)
+
+mod.bm <- rma.mv(yi = yi, V = vcv,
+                   random = list(~1 | Study_ID,
+                                 ~1 | Species_tree, # phylo effect 
+                                 ~1 | Species2, # non-phylo effect 
+                                 ~1 | Obs_ID), 
+                   data =  es,
+                   mods = ~ logmass,
+                   control=list(optimizer="BFGS"),
+                   test = "t",
+                   sparse = TRUE,
+                   R = list(Species_tree = cor1)
+  )
+
+summary(mod.bm)
+
+newdat <- data.frame(logmass = seq(min(es$logmass, na.rm = TRUE),
+                                   max(es$logmass, na.rm = TRUE),
+                                   length.out = 100))
+
+X <- model.matrix(~ logmass, data = newdat)[, -1, drop = FALSE]
+
+preds <- predict(mod.bm, newmods = X)
+
+plot_data <- cbind(newdat, preds)
+
+setDT(es)
+
+es[, wi := 1/sqrt(vi)]
+es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
+es
+
+prey_bm_text <- tidy(mod.bm)
+prey_bm_text
+
+p.bm.mean <- ggplot()+
+  # now add the rest of the points:
+  geom_jitter(data = es, 
+              aes(x = logmass, size = pt_size, 
+                  y = yi),
+              position = position_jitter(width = 0.01),
+              inherit.aes = F,  alpha = 0.5)+
+  geom_hline(yintercept = 0, lty = "dashed")+
+  geom_ribbon(data = plot_data,
+              aes(x = logmass,
+                  ymin = pi.lb, ymax = pi.ub),
+              fill = "transparent", color = "#dad7cd",
+              alpha = .3)+
+  geom_ribbon(data = plot_data, 
+              aes(x = logmass,
+                  ymin = ci.lb, ymax = ci.ub),
+              alpha = .3)+
+  geom_line(data = plot_data, 
+            aes(x = logmass,
+                y = pred),
+            alpha = .8)+
+  
+  # coord_cartesian(ylim = c(-4, 4))+
+  scale_size_identity()+
+  theme_bw()+
+  xlab("Log body mass (g)")+
+  ylab("Hedge's G")+
+  theme(legend.position = "none",
+        text = element_text(color = "black", family = "Helvetica"), axis.text = element_text(color = "black", family = "Helvetica"),
+        panel.grid = element_blank(),
+        panel.border = element_blank())
+
+p.bm.mean
+
+```
+
+### Body Mass Mammals
+
+```{r, echo = T}
+# Filtering mammals
+bm.mam.es <- es %>%
+  filter(class_ncbi %in% c("Mammalia"))
+
+#VCV
+mam.vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5, 
+                 data = bm.mam.es) 
+
+# Model
+mod.bm.mam <- rma.mv(yi = yi, V = mam.vcv,
+                       random = list(~1 | Study_ID,
+                                     ~1 | Species_tree, # phylo effect 
+                                     ~1 | Species2, # non-phylo effect 
+                                     ~1 | Obs_ID), 
+                       data =  bm.mam.es,
+                       mods = ~ logmass,
+                       control=list(optimizer="BFGS"),
+                       test = "t",
+                       sparse = TRUE,
+                       R = list(Species_tree = cor1)
+  )
+
+summary(mod.bm.mam)
+
+newdat.mam <- data.frame(logmass = seq(min(bm.mam.es$logmass, na.rm = TRUE),
+                                       max(bm.mam.es$logmass, na.rm = TRUE),
+                                       length.out = 100)) ## CM: Why is the length out 100?
+
+X <- model.matrix(~ logmass, data = newdat.mam)[, -1, drop = FALSE]
+
+preds.mam <- predict(mod.bm.mam, newmods = X)
+
+plot_data.mam <- cbind(newdat.mam, preds.mam)
+
+setDT(bm.mam.es)
+
+bm.mam.es[, wi := 1/sqrt(vi)]
+bm.mam.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
+bm.mam.es
+
+prey_bm.mam_text <- tidy(mod.bm.mam)
+prey_bm.mam_text
+
+p.bm.mam.mean <- ggplot()+
+  # now add the rest of the points:
+  geom_jitter(data = bm.mam.es, 
+              aes(x = logmass, size = pt_size, 
+                  y = yi),
+              position = position_jitter(width = 0.01),
+              inherit.aes = F,  alpha = 0.5)+
+  geom_hline(yintercept = 0, lty = "dashed")+
+  geom_ribbon(data = plot_data.mam,
+              aes(x = logmass,
+                  ymin = pi.lb, ymax = pi.ub),
+              fill = "transparent", color = "#dad7cd",
+              alpha = .3)+
+  geom_ribbon(data = plot_data.mam, 
+              aes(x = logmass,
+                  ymin = ci.lb, ymax = ci.ub),
+              alpha = .3)+
+  geom_line(data = plot_data.mam, 
+            aes(x = logmass,
+                y = pred),
+            alpha = .8)+
+  
+  # coord_cartesian(ylim = c(-4, 4))+
+  scale_size_identity()+
+  theme_bw()+
+  xlab("Mammal Log body mass (g)")+
+  ylab("Hedge's G")+
+  theme(legend.position = "none",
+        text = element_text(color = "black", family = "Helvetica"), axis.text = element_text(color = "black", family = "Helvetica"),
+        panel.grid = element_blank(),
+        panel.border = element_blank())
+
+p.bm.mam.mean
+
+```
+
+### Body Mass Birds
+
+```{r, echo = T}
+# Filtering birds
+bm.ave.es <- es %>%
+  filter(class_ncbi %in% c("Aves"))
+
+# VCV
+aves.vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5, # rho is usually 0.5 or 0.8
+                  data = bm.ave.es) 
+
+# Model
+mod.bm.ave <- rma.mv(yi = yi, V = aves.vcv,
+                       random = list(~1 | Study_ID,
+                                     ~1 | Species_tree, # phylo effect 
+                                     ~1 | Species2, # non-phylo effect 
+                                     ~1 | Obs_ID), 
+                       data =  bm.ave.es,
+                       mods = ~ logmass,
+                       control=list(optimizer="BFGS"),
+                       test = "t",
+                       sparse = TRUE,
+                       R = list(Species_tree = cor1)
+  )
+
+summary(mod.bm.ave)
+
+newdat.ave <- data.frame(logmass = seq(min(bm.ave.es$logmass, na.rm = TRUE),
+                                       max(bm.ave.es$logmass, na.rm = TRUE),
+                                       length.out = 100)) ## CM: Why is the length out 100?
+
+X <- model.matrix(~ logmass, data = newdat.ave)[, -1, drop = FALSE]
+
+preds.ave <- predict(mod.bm.ave, newmods = X)
+
+plot_data.ave <- cbind(newdat.ave, preds.ave)
+
+setDT(bm.ave.es)
+
+bm.ave.es[, wi := 1/sqrt(vi)]
+bm.ave.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
+bm.ave.es
+
+prey_bm.ave_text <- tidy(mod.bm.ave)
+prey_bm.ave_text
+
+p.bm.ave.mean <- ggplot()+
+  # now add the rest of the points:
+  geom_jitter(data = bm.ave.es, 
+              aes(x = logmass, size = pt_size, 
+                  y = yi),
+              position = position_jitter(width = 0.01),
+              inherit.aes = F,  alpha = 0.5)+
+  geom_hline(yintercept = 0, lty = "dashed")+
+  geom_ribbon(data = plot_data.ave,
+              aes(x = logmass,
+                  ymin = pi.lb, ymax = pi.ub),
+              fill = "transparent", color = "#dad7cd",
+              alpha = .3)+
+  geom_ribbon(data = plot_data.ave, 
+              aes(x = logmass,
+                  ymin = ci.lb, ymax = ci.ub),
+              alpha = .3)+
+  geom_line(data = plot_data.ave, 
+            aes(x = logmass,
+                y = pred),
+            alpha = .8)+
+  
+  # coord_cartesian(ylim = c(-4, 4))+
+  scale_size_identity()+
+  theme_bw()+
+  xlab("Aves Log body mass (g)")+
+  ylab("Hedge's G")+
+  theme(legend.position = "none",
+        text = element_text(color = "black", family = "Helvetica"), axis.text = element_text(color = "black", family = "Helvetica"),
+        panel.grid = element_blank(),
+        panel.border = element_blank())
+
+p.bm.ave.mean
+
+```
+
+### Body Mass Reptiles
+
+```{r, echo = T}
+# Filtering reptiles
+bm.rep.es <- es %>%
+  filter(class_ncbi %in% c("Reptilia"))
+
+# VCV
+rep.vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5,
+                 data = bm.rep.es) 
+# Model
+mod.bm.rep <- rma.mv(yi = yi, V = rep.vcv,
+                       random = list(~1 | Study_ID,
+                                     ~1 | Species_tree, # phylo effect 
+                                     ~1 | Species2, # non-phylo effect 
+                                     ~1 | Obs_ID), 
+                       data =  bm.rep.es,
+                       mods = ~ logmass,
+                       control=list(optimizer="BFGS"),
+                       test = "t",
+                       sparse = TRUE,
+                       R = list(Species_tree = cor1)
+  )
+
+summary(mod.bm.rep)
+
+newdat.rep <- data.frame(logmass = seq(min(bm.rep.es$logmass, na.rm = TRUE),
+                                       max(bm.rep.es$logmass, na.rm = TRUE),
+                                       length.out = 100)) 
+
+X <- model.matrix(~ logmass, data = newdat.rep)[, -1, drop = FALSE]
+
+preds.rep <- predict(mod.bm.rep, newmods = X)
+
+plot_data.rep <- cbind(newdat.rep, preds.rep)
+
+setDT(bm.rep.es)
+
+bm.rep.es[, wi := 1/sqrt(vi)]
+bm.rep.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
+bm.rep.es
+
+prey_bm.rep_text <- tidy(mod.bm.rep)
+prey_bm.rep_text 
+
+p.bm.rep.mean <- ggplot()+
+  # now add the rest of the points:
+  geom_jitter(data = bm.rep.es, 
+              aes(x = logmass, size = pt_size, 
+                  y = yi),
+              position = position_jitter(width = 0.01),
+              inherit.aes = F,  alpha = 0.5)+
+  geom_hline(yintercept = 0, lty = "dashed")+
+  geom_ribbon(data = plot_data.rep,
+              aes(x = logmass,
+                  ymin = pi.lb, ymax = pi.ub),
+              fill = "transparent", color = "#dad7cd",
+              alpha = .3)+
+  geom_ribbon(data = plot_data.rep, 
+              aes(x = logmass,
+                  ymin = ci.lb, ymax = ci.ub),
+              alpha = .3)+
+  geom_line(data = plot_data.rep, 
+            aes(x = logmass,
+                y = pred),
+            alpha = .8)+
+  
+  # coord_cartesian(ylim = c(-4, 4))+
+  scale_size_identity()+
+  theme_bw()+
+  xlab("Reptilia Log body mass (g)")+
+  ylab("Hedge's G")+
+  theme(legend.position = "none",
+        text = element_text(color = "black", family = "Helvetica"), axis.text = element_text(color = "black", family = "Helvetica"),
+        panel.grid = element_blank(),
+        panel.border = element_blank())
+
+p.bm.rep.mean
+
+```
+
+## Publication bias testing predator-prey {.tabset}
+
+### Decline effect for difference
+
+```{r, echo = T}
+
+str(es$Publication_Year)
+
+mod_mad <- rma.mv(yi = yi, V = vcv,
+                  random = list(~1 | Study_ID,
+                                ~1 | Species_tree, # phylo effect 
+                                ~1 | Species2, # non-phylo effect 
+                                ~1 | Obs_ID), 
+                  data = es,
+                  mods = ~ Publication_Year,
+                  control=list(optimizer="BFGS"),
+                  test = "t",
+                  sparse = TRUE,
+                  R = list(Species_tree = cor1)
+)
+
+summary(mod_mad)
+
+decline <- bubble_plot(mod_mad,
+                       mod = "Publication_Year",
+                       group = "Study_ID",
+                       xlab = "Publication year",
+                       ylab = "Hedge's g",
+                       g = TRUE,
+                       weights = 1/sqrt(es$vi))
+
+decline
+
+```
+
+### Eggers regression + funnel
+
+```{r, echo = T}
+
+es$effectN <- (es$Unburned_n * es$Burned_n) / (es$Unburned_n + es$Burned_n)
+es$sqeffectN <- sqrt(es$effectN)
+
+mod_diff_egg <- rma.mv(yi = yi, V = vcv,
+                         random = list(~1 | Study_ID,
+                                       ~1 | Species_tree, # phylo effect 
+                                       ~1 | Species2, # non-phylo effect 
+                                       ~1 | Obs_ID), 
+                         data =  es,
+                         mods = ~ sqeffectN,
+                         control=list(optimizer="BFGS"),
+                         test = "t",
+                         sparse = TRUE,
+                         R = list(Species_tree = cor1)
+  )
+  summary(mod_diff_egg)
+
+funnel(mod_diff_egg, 
+       yaxis="seinv",
+       xlab = "Standardized residuals",
+       ylab = "Precision (inverse of SE)",
+       
+)
+```
+
+### Leave one out
+
+```{r, echo = T, eval = FALSE}
+
+es$Firstauthor_Year <- as.factor(es$Firstauthor_Year)
+
+es$leave_out <- as.factor(es$Firstauthor_Year)
+
+LeaveOneOut_effectsize <- list()
+for (i in 1:length(levels(es$leave_out))) {
+  temp_dat <- es %>%
+    dplyr::filter(leave_out != levels(es$leave_out)[i])
+  
+  VCV_leaveout <- vcalc(vi = temp_dat$vi, cluster = temp_dat$Study_ID, obs = temp_dat$Obs_ID, rho = 0.5)
+  
+  LeaveOneOut_effectsize[[i]] <-  rma.mv(yi = yi, V = VCV_leaveout,
+                                         random = list(~1 | Study_ID,
+                                                       ~1 | Species_tree, # phylo effect 
+                                                       ~1 | Species2, # non-phylo effect 
+                                                       ~1 | Obs_ID), 
+                                         control=list(optimizer="BFGS"),
+                                         test = "t",
+                                         method = "REML", 
+                                         sparse = TRUE,
+                                         R = list(Species_tree = cor1),
+                                         data = temp_dat[temp_dat$leave_out != levels(temp_dat$leave_out)[i], ])
+}
+
+
+# Writing function for extracting est, ci.lb, and ci.ub from all models
+est.func <- function(model) {
+  df <- data.frame(est = model$b, lower = model$ci.lb, upper = model$ci.ub)
+  return(df)
+}
+
+# Using dplyr to form data frame
+MA_oneout <- lapply(LeaveOneOut_effectsize,function(x) est.func(x)) %>%
+  bind_rows %>%
+  mutate(left_out = levels(es$leave_out))
+
+# Telling ggplot to stop reordering factors
+MA_oneout$left_out <- as.factor(MA_oneout$left_out)
+MA_oneout$left_out <- factor(MA_oneout$left_out, levels = MA_oneout$left_out)
+
+# Saving the runs
+saveRDS(MA_oneout, here("Outputs/No_space_use", "MA_oneout.RDS"))
+
+
+```
+
+```{r, echo = F}
+MA_oneout <- readRDS(here("Outputs/No_space_use", "MA_oneout.RDS"))
+
+leaveoneout <- ggplot(MA_oneout) + geom_hline(yintercept = 0, lty = 2, lwd = 1) +
+  geom_hline(yintercept = mod.overall$ci.lb, lty = 3, lwd = 0.75, colour = "black") +
+  geom_hline(yintercept = mod.overall$b, lty = 1, lwd = 0.75, colour = "black") + 
+  geom_hline(yintercept = mod.overall$ci.ub,
+             lty = 3, lwd = 0.75, colour = "black") + 
+  geom_pointrange(aes(x = left_out, y = est,
+                      ymin = lower, ymax = upper)) + 
+  xlab("Study left out") + 
+  ylab("Difference in logit overlap (logit)") +
+  coord_flip() + 
+  theme(panel.grid.minor = element_blank()) + theme_bw() + theme(panel.grid.major = element_blank()) +
+  theme(panel.grid.minor.x = element_blank()) + theme(axis.text.y = element_text(size = 6))
+
+leaveoneout
+
+```
+
+## R Session Information
+
+```{r, echo = T}
+# pander for making it look nicer
+sessionInfo() %>% pander()
+```
