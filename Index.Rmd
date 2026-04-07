@@ -3,7 +3,16 @@ title: "**MOVEMENT IN THE PYROCENE: A GLOBAL META-ANALYSIS OF ANIMAL MOVEMENT RE
 subtitle: "**Supplementary Material**"
 written by: "**CL McAuley, EIF Wooster, TS Doherty, MA Cowan, CJ Jolly, GD Linley, DM Westaway, B Wilson, DG Nimmo**"
 date: "`r Sys.Date()`"
-format:
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 4
+    theme: simplex
+    number_sections: true
+    code_folding: hide
+    self_contained: true
+    format:
   html:
     toc: true
     toc-location: left
@@ -31,7 +40,6 @@ execute:
   warning: false
   message: false
   tidy: true
-  #cache: true
 ---
 
 ------------------------------------------------------------------------
@@ -41,6 +49,10 @@ execute:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,    
+                      message = FALSE)
 #knitr::opts_chunk$set(eval = FALSE)
 ```
 
@@ -68,7 +80,8 @@ pacman::p_load(devtools,
                matrixcalc,
                ape, 
                multcomp,
-               kableExtra
+               kableExtra,
+               pander
 ) 
 
 
@@ -77,7 +90,7 @@ pacman::p_load(devtools,
 
 ### Reading in Dataset and Phylogentic Tree
 
-```{r, echo = T}
+```{r, echo = T, results = 'hide'}
 
 # Reading in Data
 data <- read.csv(here("Outputs/Dat_for_MA_analysisRev5.csv")) 
@@ -96,7 +109,7 @@ setdiff(data$Species_tree, tree1$tip.label)
 
 ### Calculating Effect Sizes
 
-```{r, echo = T}
+```{r, echo = F, results = 'hide'}
 
 # Calculating Hedge's G
 es <- escalc(
@@ -132,7 +145,7 @@ es <- es %>%
 
 ### Correlation matrices to account for non-independence in models
 
-```{r, echo = T}
+```{r, echo = T, results = 'hide'}
 
 # Matrix to account for non-independence in studies and observations
 vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5,
@@ -938,4 +951,8 @@ leaveoneout <- ggplot(MA_oneout) + geom_hline(yintercept = 0, lty = 2, lwd = 1) 
 leaveoneout
 
 ```
+## R Session Information
 
+```{r, echo = T}
+# pander for making it look nicer
+sessionInfo() %>% pander()
