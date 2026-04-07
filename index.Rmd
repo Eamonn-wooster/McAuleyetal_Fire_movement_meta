@@ -11,7 +11,7 @@ output:
     theme: simplex
     number_sections: true
     code_folding: hide
-    self_contained: true
+    self_contained: false
   
 ---
 
