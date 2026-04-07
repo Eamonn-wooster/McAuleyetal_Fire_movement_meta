@@ -12,34 +12,7 @@ output:
     number_sections: true
     code_folding: hide
     self_contained: true
-    format:
-  html:
-    toc: true
-    toc-location: left
-    toc-depth: 4
-    toc-title: "**Table of Contents**"
-    output-file: "index.html"
-    theme: simplex
-    embed-resources: true
-    code-fold: true
-    code-tools: true
-    number-sections: true
-    #bibliography: ./bib/ref.bib
-    fontsize: "12"
-    max-width: "10"
-    code-overflow: wrap
-crossref: 
-  fig-title: Figure     # (default is "Figure")
-  tbl-title: Table     # (default is "Table")
-  title-delim: —     # (default is ":")
-  fig-prefix: Fig.   # (default is "Figure")
-  tbl-prefix: Tab.    # (default is "Table")
-editor_options: 
-  chunk_output_type: console
-execute:
-  warning: false
-  message: false
-  tidy: true
+  
 ---
 
 ------------------------------------------------------------------------
