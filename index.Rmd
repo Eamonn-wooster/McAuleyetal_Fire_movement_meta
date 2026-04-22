@@ -82,7 +82,7 @@ setdiff(data$Species_tree, tree1$tip.label)
 
 ### Calculating Effect Sizes
 
-```{r, echo = F}
+```{r, echo = T}
 
 # Calculating Hedge's G
 es <- escalc(
@@ -108,11 +108,11 @@ es$StudyID <- NULL
 es$Study_ID <- factor(as.numeric(as.factor(es$Firstauthor_Year)))
 
 # Correcting direction of ES for Harris2020 tortuosity
-es %>%
-  dplyr::filter(Firstauthor_Year %in% c("Harris2020"))
+invisible(es %>%
+  dplyr::filter(Firstauthor_Year %in% c("Harris2020")))
   
-es <- es %>%
-  mutate(yi = ifelse(Obs_ID %in% c(91), yi * -1, yi))
+invisible(es <- es %>%
+  mutate(yi = ifelse(Obs_ID %in% c(91), yi * -1, yi)))
 
 ```
 
