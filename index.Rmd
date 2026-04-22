@@ -261,14 +261,14 @@ size.es <- es %>%
   mutate(Impact_fire_size_ha = as.integer(round(Impact_fire_size_ha)))
 
 # Looking for NAs
-summary(size.es$Impact_fire_size_ha)
+# summary(size.es$Impact_fire_size_ha)
 
 # Removing NAs
 size.es <- size.es[!is.na(size.es$Impact_fire_size_ha), ]
 
 # Transforming data
 size.es$log.size <- log(size.es$Impact_fire_size_ha)
-hist(size.es$log.size)
+# hist(size.es$log.size)
 
 #VCV 
 size.vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5,
@@ -303,10 +303,10 @@ setDT(size.es)
 
 size.es[, wi := 1/sqrt(vi)]
 size.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
-size.es
+
 
 prey_age_text <- tidy(mod.size)
-prey_age_text
+# prey_age_text
 
 p.size.mean <- ggplot()+
   # now add the rest of the points:
@@ -357,14 +357,14 @@ es <- es %>%
   ))
 
 # Looking for NAs
-summary(es$Maximum_treatment_burn_age_days)
+
 
 # Removing NAs
 age.es <- es[!is.na(es$Maximum_treatment_burn_age_days), ]
 
 # Transforming data
 age.es$log.age <- log(age.es$Maximum_treatment_burn_age_days)
-hist(age.es$log.age)
+
 
 age.vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5,
                    data = age.es) 
@@ -398,10 +398,10 @@ setDT(age.es)
 
 age.es[, wi := 1/sqrt(vi)]
 age.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
-age.es
+# age.es
 
 prey_age_text <- tidy(mod.age)
-prey_age_text
+# prey_age_text
 
 p.age.mean <- ggplot()+
   # now add the rest of the points:
@@ -448,7 +448,7 @@ biome.es <- es %>%
   filter(n() >= 10) %>%
   ungroup()
 
-table(biome.es$biome_name)
+
 
 biome.es$biome_name <- factor(biome.es$biome_name)
 
@@ -515,10 +515,10 @@ setDT(es)
 
 es[, wi := 1/sqrt(vi)]
 es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
-es
+
 
 prey_bm_text <- tidy(mod.bm)
-prey_bm_text
+
 
 p.bm.mean <- ggplot()+
   # now add the rest of the points:
@@ -597,10 +597,10 @@ setDT(bm.mam.es)
 
 bm.mam.es[, wi := 1/sqrt(vi)]
 bm.mam.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
-bm.mam.es
+
 
 prey_bm.mam_text <- tidy(mod.bm.mam)
-prey_bm.mam_text
+
 
 p.bm.mam.mean <- ggplot()+
   # now add the rest of the points:
@@ -679,10 +679,10 @@ setDT(bm.ave.es)
 
 bm.ave.es[, wi := 1/sqrt(vi)]
 bm.ave.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
-bm.ave.es
+
 
 prey_bm.ave_text <- tidy(mod.bm.ave)
-prey_bm.ave_text
+
 
 p.bm.ave.mean <- ggplot()+
   # now add the rest of the points:
@@ -760,10 +760,10 @@ setDT(bm.rep.es)
 
 bm.rep.es[, wi := 1/sqrt(vi)]
 bm.rep.es[, pt_size := 2 + 7 * (wi-min(wi, na.rm = T)) / (max(wi, na.rm = T) - min(wi, na.rm = T))]
-bm.rep.es
+
 
 prey_bm.rep_text <- tidy(mod.bm.rep)
-prey_bm.rep_text 
+
 
 p.bm.rep.mean <- ggplot()+
   # now add the rest of the points:
@@ -801,7 +801,7 @@ p.bm.rep.mean
 
 ```
 
-## Publication bias testing predator-prey {.tabset}
+## Publication bias {.tabset}
 
 ### Decline effect for difference
 
