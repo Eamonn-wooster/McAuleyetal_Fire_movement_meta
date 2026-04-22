@@ -82,7 +82,7 @@ setdiff(data$Species_tree, tree1$tip.label)
 
 ### Calculating Effect Sizes
 
-```{r, echo = T}
+```{r, echo = F}
 
 # Calculating Hedge's G
 es <- escalc(
@@ -96,8 +96,8 @@ es <- escalc(
   data = data,
   vtype = "UB")          
 
-# Inspecting results
-print(es) 
+
+
 
 # Adding factor for obs level random effect
 es$Obs_ID <- factor(1:nrow(es))
