@@ -82,7 +82,7 @@ setdiff(data$Species_tree, tree1$tip.label)
 
 ### Calculating Effect Sizes
 
-```{r, echo = F, results = 'hide'}
+```{r, echo = T}
 
 # Calculating Hedge's G
 es <- escalc(
