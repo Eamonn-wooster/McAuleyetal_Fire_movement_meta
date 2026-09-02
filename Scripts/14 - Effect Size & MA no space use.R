@@ -240,6 +240,61 @@ vcv <- vcalc(vi, cluster = Study_ID, obs = Obs_ID, rho = 0.5,
 
 #Overall model
 
+###Random effect selection
+mod.overall.full <- rma.mv(yi = yi, V = vcv,
+                      random = list(~1 | Study_ID,
+                                    ~1 | Species_tree, # phylo effect 
+                                    ~1 | Species2, # non-phylo effect 
+                                    ~1 | Obs_ID), 
+                      data =  es,
+                      control = list(optimizer="BFGS"),
+                      test = "t",
+                      sparse = TRUE,
+                      R = list(Species_tree = cor1)
+)
+
+
+mod.overall.three <- rma.mv(yi = yi, V = vcv,
+                           random = list(~1 | Study_ID,
+                                         
+                                         ~1 | Species2, # non-phylo effect 
+                                         ~1 | Obs_ID), 
+                           data =  es,
+                           control = list(optimizer="BFGS"),
+                           test = "t",
+                           sparse = TRUE
+)
+
+
+AIC(mod.overall.full, mod.overall.three)
+
+mod.overall.two <- rma.mv(yi = yi, V = vcv,
+                            random = list(~1 | Study_ID,
+                                          ~1 | Obs_ID), 
+                            data =  es,
+                            control = list(optimizer="BFGS"),
+                            test = "t",
+                            sparse = TRUE
+)
+
+AIC(mod.overall.two, mod.overall.three)
+
+mod.overall.twonovcv <- rma.mv(yi = yi, V = vi,
+                          random = list(~1 | Study_ID,
+                                        ~1 | Obs_ID), 
+                          data =  es,
+                          test = "t",
+                          sparse = TRUE
+)
+
+#much improved - this is the best model
+#' [EW - as suspected the model peforms best when we only have studyID and obs ID included]
+
+
+AIC(mod.overall.twonovcvnested, mod.overall.twonovcv)
+
+
+
 rerun <- FALSE
 
 if(rerun){
